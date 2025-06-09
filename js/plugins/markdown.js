@@ -17,11 +17,11 @@ class MarkdownPlugin extends GridPlugin {
     this.container.innerHTML = `
       <div class="markdown-editor">
         <div class="editor-toolbar">
-          <button title="Bold" data-action="bold">B</button>
-          <button title="Italic" data-action="italic">I</button>
-          <button title="Heading" data-action="heading">#</button>
-          <button title="List" data-action="list">•</button>
-          <button title="Link" data-action="link">🔗</button>
+          <button title="Bold" data-action="bold"><span class="material-icons">format_bold</span></button>
+          <button title="Italic" data-action="italic"><span class="material-icons">format_italic</span></button>
+          <button title="Heading" data-action="heading"><span class="material-icons">title</span></button>
+          <button title="List" data-action="list"><span class="material-icons">format_list_bulleted</span></button>
+          <button title="Link" data-action="link"><span class="material-icons">link</span></button>
         </div>
         <div class="editor-container">
           <textarea class="markdown-input"></textarea>
@@ -141,6 +141,16 @@ class MarkdownPlugin extends GridPlugin {
     } else {
       this.textarea.value = this.state.content;
       this.updatePreview();
+    }
+  }
+  
+  /**
+   * Update plugin state
+   * @param {Object} newState - New state object
+   */
+  setState(newState) {
+    if (newState.content !== undefined) {
+      this.state.content = newState.content;
     }
   }
   

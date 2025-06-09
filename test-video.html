@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .video-container {
+      width: 100%;
+    }
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .instructions {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f5f5f5;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Video Player Test</h1>
+  
+  <div class="video-container">
+    <video controls>
+      <source src="example_01.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  
+  <div class="instructions">
+    <h2>Instructions</h2>
+    <p>This is a test page to verify that the example_01.mp4 file can be played directly in a browser.</p>
+    <p>If the video plays here but not in the GridUI application, it indicates an issue with how the video URL is being handled in the application.</p>
+  </div>
+</body>
+</html>

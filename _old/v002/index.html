@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid System</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- Load base plugin class -->
+  <script src="js/plugins/base.js"></script>
+  <!-- Load plugin registry -->
+  <script src="js/plugins/registry.js"></script>
+  <!-- Load plugins -->
+  <script src="js/plugins/markdown.js"></script>
+  <script src="js/plugins/video.js"></script>
+  <script src="js/plugins/filetree.js"></script>
+  <script src="js/plugins/nodegraph.js"></script>
+  <!-- Load grid system -->
+  <script src="js/grid.js"></script>
+  <!-- Load main application -->
+  <script src="js/main.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="app-title">
+      <h1>Grid System</h1>
+    </div>
+    <div class="app-controls">
+      <button id="add-item-btn" class="control-btn" title="Add New Item">
+        <span class="btn-icon">+</span>
+        <span class="btn-text">Add Item</span>
+      </button>
+      <button id="save-btn" class="control-btn" title="Save Layout">
+        <span class="btn-icon">💾</span>
+        <span class="btn-text">Save</span>
+      </button>
+      <button id="reset-btn" class="control-btn" title="Reset Layout">
+        <span class="btn-icon">🔄</span>
+        <span class="btn-text">Reset</span>
+      </button>
+      <button id="theme-toggle-btn" class="control-btn" title="Toggle Theme">
+        <span class="btn-icon">🌓</span>
+        <span class="btn-text">Theme</span>
+      </button>
+    </div>
+  </header>
+  
+  <main id="grid-container" class="main-container">
+    <!-- Grid items will be added here by JavaScript -->
+  </main>
+
+  <footer class="app-footer">
+    <p>Grid System &copy; 2025 - Made with vanilla JavaScript, CSS, and HTML</p>
+  </footer>
+</body>
+</html>

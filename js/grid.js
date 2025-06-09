@@ -6,12 +6,12 @@ class Grid {
   constructor(container, options = {}) {
     this.container = container;
     this.options = Object.assign({
-      columns: 12,
-      rowHeight: 50,
-      gap: 10,
-      snapToGrid: true,
-      autoSave: true,
-      theme: 'light'
+      columns: 100,           // Increased column count for finer granularity
+      rowHeight: 10,         // Reduced row height for smaller cells
+      gap: 10,                // Reduced gap for tighter grid
+      snapToGrid: true,     // Enable snapping to grid
+      autoSave: true,     // Enable auto-saving of layout
+      theme: 'dark' // Default theme
     }, options);
     
     this.items = new Map();
@@ -41,6 +41,13 @@ class Grid {
     this.gridElement.style.setProperty('--grid-columns', this.options.columns);
     this.gridElement.style.setProperty('--grid-row-height', `${this.options.rowHeight}px`);
     this.gridElement.style.setProperty('--grid-gap', `${this.options.gap}px`);
+    
+    // Also apply the grid settings directly to ensure they override :root variables
+    this.gridElement.style.gridTemplateColumns = `repeat(${this.options.columns}, 1fr)`;
+    this.gridElement.style.gridAutoRows = `${this.options.rowHeight}px`;
+    this.gridElement.style.gridGap = `${this.options.gap}px`;
+    
+    console.log('Grid settings updated:', this.options);
   }
   
   addItem(options = {}) {
@@ -84,7 +91,7 @@ class Grid {
     header.innerHTML = `
       <div class="grid-item-title">${pluginInfo.name}</div>
       <div class="grid-item-controls">
-        <button class="grid-item-close" title="Close">×</button>
+        <button class="grid-item-close" title="Close"><span class="material-icons">close</span></button>
       </div>
     `;
     
@@ -231,6 +238,7 @@ class Grid {
       const cellWidth = (this.gridElement.clientWidth / this.options.columns);
       const cellHeight = this.options.rowHeight + this.options.gap;
       
+      // Use standard calculation for delta - fixes the "faster than mouse" issue
       const deltaX = Math.round((clientX - startX) / cellWidth);
       const deltaY = Math.round((clientY - startY) / cellHeight);
       
@@ -327,6 +335,7 @@ class Grid {
       const cellWidth = (this.gridElement.clientWidth / this.options.columns);
       const cellHeight = this.options.rowHeight + this.options.gap;
       
+      // Use standard calculation for delta - fixes the "faster than mouse" issue
       const deltaX = Math.round((clientX - startX) / cellWidth);
       const deltaY = Math.round((clientY - startY) / cellHeight);
       
@@ -467,6 +476,25 @@ class Grid {
     }
     
     return this.options.theme;
+  }
+  
+  /**
+   * Update grid options
+   * @param {Object} newOptions - New grid options
+   */
+  updateOptions(newOptions) {
+    // Update options
+    this.options = Object.assign(this.options, newOptions);
+    
+    // Update grid styles
+    this.updateGridStyles();
+    
+    // Save layout if autoSave is enabled
+    if (this.options.autoSave) {
+      this.saveLayout();
+    }
+    
+    return this.options;
   }
   
   getPluginInfo(type) {

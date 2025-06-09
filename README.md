@@ -29,18 +29,12 @@ No build process required! Simply clone the repository and serve it with any web
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/grid-system.git
+git clone https://github.com/yourusername/gridui.git
 
 # Navigate to the project
-cd grid-system
+cd gridui
 
-# Serve with Python's built-in server
-python -m http.server
-
-# Or with any other static file server
-```
-
-Then open your browser to `http://localhost:8000`
+Then open `index.html`
 
 ## Usage
 

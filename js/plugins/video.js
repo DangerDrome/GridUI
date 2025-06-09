@@ -23,10 +23,10 @@ class VideoPlugin extends GridPlugin {
           Your browser doesn't support HTML5 video.
         </video>
         <div class="video-controls">
-          <button class="play-pause">▶</button>
+          <button class="play-pause"><span class="material-icons">play_arrow</span></button>
           <input type="range" class="timeline" min="0" max="100" value="0">
           <div class="volume-control">
-            <button class="volume-button">🔊</button>
+            <button class="volume-button"><span class="material-icons">volume_up</span></button>
             <input type="range" class="volume" min="0" max="1" step="0.1" value="1">
           </div>
           <div class="time-display">0:00 / 0:00</div>
@@ -54,7 +54,7 @@ class VideoPlugin extends GridPlugin {
     });
     
     this.video.addEventListener('ended', () => {
-      this.playPauseBtn.textContent = '▶';
+      this.playPauseBtn.innerHTML = '<span class="material-icons">play_arrow</span>';
       this.state.playing = false;
     });
     
@@ -62,14 +62,14 @@ class VideoPlugin extends GridPlugin {
     this.playPauseBtn.addEventListener('click', () => {
       if (this.video.paused) {
         this.video.play().then(() => {
-          this.playPauseBtn.textContent = '❚❚';
+          this.playPauseBtn.innerHTML = '<span class="material-icons">pause</span>';
           this.state.playing = true;
         }).catch(err => {
           console.error('Error playing video:', err);
         });
       } else {
         this.video.pause();
-        this.playPauseBtn.textContent = '▶';
+        this.playPauseBtn.innerHTML = '<span class="material-icons">play_arrow</span>';
         this.state.playing = false;
       }
     });
@@ -122,11 +122,11 @@ class VideoPlugin extends GridPlugin {
   
   updateVolumeIcon() {
     if (this.video.muted || this.video.volume === 0) {
-      this.volumeBtn.textContent = '🔇';
+      this.volumeBtn.innerHTML = '<span class="material-icons">volume_off</span>';
     } else if (this.video.volume < 0.5) {
-      this.volumeBtn.textContent = '🔉';
+      this.volumeBtn.innerHTML = '<span class="material-icons">volume_down</span>';
     } else {
-      this.volumeBtn.textContent = '🔊';
+      this.volumeBtn.innerHTML = '<span class="material-icons">volume_up</span>';
     }
   }
   
@@ -138,15 +138,42 @@ class VideoPlugin extends GridPlugin {
         this.video.src = this.state.src;
       }
       
-      this.video.currentTime = this.state.currentTime;
-      this.video.volume = this.state.volume;
+      // Only set currentTime if it's a valid number
+      if (!isNaN(this.state.currentTime) && isFinite(this.state.currentTime)) {
+        this.video.currentTime = this.state.currentTime;
+      }
+      
+      // Only set volume if it's a valid number
+      if (!isNaN(this.state.volume) && isFinite(this.state.volume)) {
+        this.video.volume = this.state.volume;
+      }
       
       if (this.state.playing && this.video.paused) {
-        this.video.play().catch(() => {
+        this.video.play().catch((err) => {
+          console.error('Error playing video:', err);
           this.state.playing = false;
-          this.playPauseBtn.textContent = '▶';
+          this.playPauseBtn.innerHTML = '<span class="material-icons">play_arrow</span>';
         });
       }
+    }
+  }
+  
+  /**
+   * Update plugin state
+   * @param {Object} newState - New state object
+   */
+  setState(newState) {
+    if (newState.src !== undefined) {
+      this.state.src = newState.src;
+    }
+    if (newState.currentTime !== undefined) {
+      this.state.currentTime = newState.currentTime;
+    }
+    if (newState.volume !== undefined) {
+      this.state.volume = newState.volume;
+    }
+    if (newState.playing !== undefined) {
+      this.state.playing = newState.playing;
     }
   }
   
