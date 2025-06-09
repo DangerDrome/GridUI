@@ -1,8 +1,10 @@
 # GridUI
 
-![image](https://github.com/user-attachments/assets/902face2-98b6-4549-8a0b-a15156d423ac)
+![image](https://github.com/user-attachments/assets/bccc7c09-6f7a-4f4b-ba72-ef2d2bdaa2e7)
 
-A resizable, sortable, extendable, drag-and-drop grid system built with vanilla JavaScript, CSS, and HTML.
+![image](https://github.com/user-attachments/assets/25cf783f-eb0d-4344-8e84-24abf16444e3)
+
+### A resizable, sortable, extendable, drag-and-drop grid system built with vanilla JavaScript, CSS, and HTML.
 
 ## Features
 
