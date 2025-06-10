@@ -189,6 +189,41 @@ class Grid {
     return this.items.get(id);
   }
   
+  /**
+   * Get the next available z-index (highest + 1)
+   * @returns {number} - The next z-index value
+   */
+  getNextZIndex() {
+    let maxZ = 1;
+    this.items.forEach(item => {
+      if (item.zIndex > maxZ) {
+        maxZ = item.zIndex;
+      }
+    });
+    return maxZ + 1;
+  }
+  
+  /**
+   * Bring an item to the front (highest z-index)
+   * @param {string} id - The item id
+   */
+  bringToFront(id) {
+    const item = this.items.get(id);
+    if (!item) return;
+    
+    const newZIndex = this.getNextZIndex();
+    item.zIndex = newZIndex;
+    item.element.style.zIndex = newZIndex;
+    item.element.dataset.zIndex = newZIndex;
+    
+    // Save layout if auto-save is enabled
+    if (this.options.autoSave) {
+      this.saveLayout();
+    }
+    
+    return newZIndex;
+  }
+  
   setupDragHandlers(element, header) {
     let isDragging = false;
     let startX, startY;
@@ -217,8 +252,9 @@ class Grid {
       document.addEventListener('mouseup', stopDrag);
       document.addEventListener('touchend', stopDrag);
       
-      // Increase z-index during drag
-      element.style.zIndex = 1000;
+      // Bring item to front when dragging
+      const itemId = element.dataset.id;
+      this.bringToFront(itemId);
     };
     
     const onDrag = (e) => {

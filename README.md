@@ -16,6 +16,8 @@
   - Video Player with custom controls
   - File Explorer with folder navigation
   - Node Graph for visual connections
+- **Context Menu**: Right-click anywhere on the grid to add items directly at that location
+- **Smart Z-Index Management**: Selected or newly added items are automatically brought to front
 - **Dark & Light Themes**: Switch between themes with a single click
 - **Persistent Settings**: Layout and preferences are saved to localStorage
 - **Responsive Design**: Works well on various screen sizes
@@ -39,7 +41,7 @@ Then open `index.html`
 
 ## Usage
 
-- **Add Items**: Click the "Add Item" button in the header
+- **Add Items**: Click the "Add Item" button in the header or right-click anywhere on the grid
 - **Move Items**: Drag items by their header bars
 - **Resize Items**: Drag the small triangle in the bottom-right corner
 - **Close Items**: Click the "×" button in the item's header
@@ -80,6 +82,15 @@ The plugin system is based on a simple inheritance model:
 2. Plugins register themselves with the `pluginRegistry`
 3. When adding a grid item, a plugin instance is created for that item
 4. Each plugin handles its own rendering and state management
+
+### Context Menu
+
+The right-click context menu provides a quick way to add items exactly where you need them:
+
+1. Right-click anywhere on the grid
+2. Select a plugin type from the menu
+3. A new item will be created at the clicked position
+4. The new item is automatically brought to the front (highest z-index)
 
 ### Themes
 

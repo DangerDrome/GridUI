@@ -12,7 +12,8 @@ class FileTreePlugin extends GridPlugin {
       rootHandle: options.rootHandle || null,
       files: options.files || [],
       expanded: options.expanded || {},
-      currentPath: ''
+      currentPath: '',
+      sequences: {} // Store detected image sequences
     };
     
     // Store file handles for reuse
@@ -67,7 +68,7 @@ class FileTreePlugin extends GridPlugin {
         </div>
         <div class="file-tree-content">
           <div class="file-tree-placeholder">
-            Click "Open Directory" to select a folder from your file system
+            Loading GridUI directory...
           </div>
         </div>
       </div>
@@ -98,6 +99,13 @@ class FileTreePlugin extends GridPlugin {
       openDirectoryBtn.disabled = true;
       addFileBtn.disabled = true;
       addFolderBtn.disabled = true;
+    } else {
+      // Display a message suggesting the user to open the GridUI directory
+      this.treeContent.innerHTML = `
+        <div class="file-tree-message">
+          <p>Click "Open Directory" to select the GridUI root directory.</p>
+        </div>
+      `;
     }
     
     // If we have a stored root handle, try to restore it
@@ -115,12 +123,31 @@ class FileTreePlugin extends GridPlugin {
     }
   }
   
-  async openDirectory() {
+  async openDirectory(defaultPath = null) {
     try {
-      // Show directory picker
-      const directoryHandle = await window.showDirectoryPicker({
-        mode: 'readwrite'
-      });
+      let directoryHandle;
+      let options = { mode: 'readwrite' };
+      
+      // If a default path is provided, try to use it
+      if (defaultPath) {
+        console.log(`Attempting to open default directory: ${defaultPath}`);
+        
+        try {
+          // Try to open the default directory
+          options.startIn = 'desktop'; // Start in a common location
+          options.id = 'GridUI-root'; // Use a consistent ID for the directory
+          directoryHandle = await window.showDirectoryPicker(options);
+        } catch (defaultErr) {
+          console.log(`Couldn't automatically open ${defaultPath}: ${defaultErr.message}`);
+          console.log("Showing directory picker without defaults...");
+          
+          // Show directory picker without specifying a default
+          directoryHandle = await window.showDirectoryPicker(options);
+        }
+      } else {
+        // No default path, just show the picker
+        directoryHandle = await window.showDirectoryPicker(options);
+      }
       
       // Store the root handle
       this.state.rootHandle = directoryHandle;
@@ -203,6 +230,13 @@ class FileTreePlugin extends GridPlugin {
         }
       }
       
+      // Check for image sequences in this directory
+      const sequences = await this.detectImageSequence(directoryHandle);
+      if (sequences) {
+        // Store detected sequences
+        this.state.sequences[path] = sequences;
+      }
+      
       // Read all entries
       for await (const entry of directoryHandle.values()) {
         // Store the handle
@@ -224,19 +258,52 @@ class FileTreePlugin extends GridPlugin {
           }
         } else {
           // Add file entry
+          // Check if this file is part of a sequence
+          let isPartOfSequence = false;
+          
+          if (this.state.sequences[path]) {
+            // Check each sequence in this directory
+            for (const seq of this.state.sequences[path]) {
+              if (seq.files.includes(entry.name)) {
+                isPartOfSequence = true;
+                break;
+              }
+            }
+          }
+          
+          // Only add if not part of a sequence (we'll add sequences separately)
+          if (!isPartOfSequence) {
+            current.push({
+              name: entry.name,
+              type: 'file'
+            });
+          }
+        }
+      }
+      
+      // Add image sequences as special entries
+      if (this.state.sequences[path]) {
+        for (const sequence of this.state.sequences[path]) {
           current.push({
-            name: entry.name,
-            type: 'file'
+            name: sequence.name,
+            type: 'sequence',
+            folderPath: path,
+            files: sequence.files,
+            count: sequence.files.length
           });
         }
       }
       
-      // Sort entries: folders first, then files, both alphabetically
+      // Sort entries: folders first, then sequences, then files, all alphabetically
       current.sort((a, b) => {
         if (a.type === b.type) {
           return a.name.localeCompare(b.name);
         }
-        return a.type === 'folder' ? -1 : 1;
+        if (a.type === 'folder') return -1;
+        if (b.type === 'folder') return 1;
+        if (a.type === 'sequence') return -1;
+        if (b.type === 'sequence') return 1;
+        return 0;
       });
       
     } catch (err) {
@@ -267,6 +334,13 @@ class FileTreePlugin extends GridPlugin {
               <span class="folder-name">${item.name}</span>
             </div>
             ${item.children && isExpanded ? this.buildTreeHTML(item.children, itemPath) : ''}
+          </li>
+        `;
+      } else if (item.type === 'sequence') {
+        html += `
+          <li class="sequence" data-id="${itemId}" data-path="${item.folderPath}" data-name="${item.name}">
+            <span class="file-icon"><span class="material-icons">movie</span></span>
+            <span class="file-name">${item.name} (${item.count} frames)</span>
           </li>
         `;
       } else {
@@ -303,6 +377,54 @@ class FileTreePlugin extends GridPlugin {
         
         // Re-render the tree
         this.renderTree();
+        
+        e.stopPropagation();
+      });
+    });
+    
+    // Sequence click events
+    const sequences = this.treeContent.querySelectorAll('.sequence');
+    sequences.forEach(sequence => {
+      sequence.addEventListener('dblclick', (e) => {
+        // Remove selected class from all items
+        this.treeContent.querySelectorAll('.selected').forEach(el => {
+          el.classList.remove('selected');
+        });
+        
+        // Add selected class to clicked item
+        sequence.classList.add('selected');
+        
+        const folderPath = sequence.dataset.path;
+        const sequenceName = sequence.dataset.name;
+        
+        // Find the sequence details
+        const sequenceData = this.state.sequences[folderPath]?.find(seq => seq.name === sequenceName);
+        
+        if (sequenceData) {
+          // Create path for image sequence plugin
+          const fullPath = `${folderPath}/${sequenceName}`;
+          
+          // Dispatch custom event for image sequence
+          const event = new CustomEvent('sequence-selected', {
+            detail: {
+              name: sequenceName,
+              folderPath: folderPath,
+              files: sequenceData.files.map(file => `${folderPath}/${file}`),
+              path: fullPath
+            }
+          });
+          this.container.dispatchEvent(event);
+          
+          // Also dispatch a global event for other components to listen to
+          document.dispatchEvent(new CustomEvent('sequence-selected', {
+            detail: {
+              name: sequenceName,
+              folderPath: folderPath,
+              files: sequenceData.files.map(file => `${folderPath}/${file}`),
+              path: fullPath
+            }
+          }));
+        }
         
         e.stopPropagation();
       });
@@ -379,6 +501,71 @@ class FileTreePlugin extends GridPlugin {
         console.error('Error reading file as text:', err);
         return null;
       }
+    }
+  }
+  
+  // Detects if a folder contains an image sequence
+  async detectImageSequence(folderHandle) {
+    try {
+      const imageFiles = [];
+      const imageRegex = /\.(jpg|jpeg|png|gif|webp)$/i;
+      const sequenceRegex = /(.+?)_(\d+)\.(jpg|jpeg|png|gif|webp)$/i;
+      
+      // Scan for image files in the folder
+      for await (const entry of folderHandle.values()) {
+        if (entry.kind === 'file' && imageRegex.test(entry.name)) {
+          imageFiles.push(entry.name);
+        }
+      }
+      
+      // Check if we have enough images to be a sequence (at least 3)
+      if (imageFiles.length < 3) {
+        return null;
+      }
+      
+      // Group image files by sequence name
+      const sequences = {};
+      
+      imageFiles.forEach(filename => {
+        const match = filename.match(sequenceRegex);
+        if (match) {
+          const [, baseName, number, ext] = match;
+          const sequenceName = `${baseName}`;
+          
+          if (!sequences[sequenceName]) {
+            sequences[sequenceName] = [];
+          }
+          
+          sequences[sequenceName].push({
+            filename,
+            number: parseInt(number),
+            ext
+          });
+        }
+      });
+      
+      // Check if we have any valid sequences
+      const validSequences = [];
+      
+      for (const [name, files] of Object.entries(sequences)) {
+        if (files.length >= 3) {
+          // Sort by frame number
+          files.sort((a, b) => a.number - b.number);
+          
+          validSequences.push({
+            name,
+            files: files.map(f => f.filename),
+            folderName: folderHandle.name,
+            folderPath: folderHandle.name
+          });
+        }
+      }
+      
+      return validSequences.length ? validSequences : null;
+      
+    } catch (err) {
+      console.error('Error detecting image sequence:', err);
+      return null;
     }
   }
   

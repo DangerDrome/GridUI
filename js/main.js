@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
     theme: localStorage.getItem('theme') || 'dark'
   });
   
+  // Setup context menu for right-click adding items
+  setupContextMenu(container, grid);
+  
   // Set up event listeners
   const addItemBtn = document.getElementById('add-item-btn');
   addItemBtn.addEventListener('click', () => {
@@ -289,7 +292,8 @@ function getPluginIcon(type) {
     markdown: '<span class="material-icons">description</span>',
     video: '<span class="material-icons">videocam</span>',
     filetree: '<span class="material-icons">folder</span>',
-    nodegraph: '<span class="material-icons">account_tree</span>'
+    nodegraph: '<span class="material-icons">account_tree</span>',
+    imagesequence: '<span class="material-icons">collections</span>'
   };
   
   return icons[type] || '<span class="material-icons">insert_drive_file</span>';
@@ -373,6 +377,121 @@ function createDefaultLayout(grid) {
       type: 'nodegraph'
     }
   });
+  
+  // Add an image sequence player
+  grid.addItem({
+    x: 40,
+    y: 0,
+    width: 30,
+    height: 30,
+    plugin: {
+      type: 'imagesequence',
+      options: {
+        framerate: 24
+      }
+    }
+  });
+}
+
+/**
+ * Setup context menu for right-click on grid
+ * @param {HTMLElement} container - The grid container
+ * @param {Grid} grid - The grid instance
+ */
+function setupContextMenu(container, grid) {
+  // Create context menu element
+  const contextMenu = document.createElement('div');
+  contextMenu.className = 'context-menu';
+  contextMenu.style.display = 'none';
+  document.body.appendChild(contextMenu);
+  
+  // Variables to store mouse position
+  let mouseX = 0;
+  let mouseY = 0;
+  let gridX = 0;
+  let gridY = 0;
+  
+  // Listen for contextmenu event on the container
+  container.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    
+    // Calculate position in grid coordinates
+    const rect = container.getBoundingClientRect();
+    const relativeX = e.clientX - rect.left;
+    const relativeY = e.clientY - rect.top;
+    
+    // Store mouse position for item creation
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    
+    // Calculate grid coordinates based on cell size
+    const cellWidth = container.clientWidth / grid.options.columns;
+    const cellHeight = grid.options.rowHeight + grid.options.gap;
+    gridX = Math.floor(relativeX / cellWidth);
+    gridY = Math.floor(relativeY / cellHeight);
+    
+    // Build context menu
+    contextMenu.innerHTML = '';
+    const title = document.createElement('div');
+    title.className = 'context-menu-title';
+    title.innerHTML = '<span class="material-icons">add_box</span> Add Item';
+    contextMenu.appendChild(title);
+    
+    // Add plugins to menu
+    const plugins = pluginRegistry.getPluginTypes();
+    plugins.forEach(type => {
+      const pluginClass = pluginRegistry.plugins[type];
+      const name = pluginClass.name || type;
+      
+      const item = document.createElement('div');
+      item.className = 'context-menu-item';
+      item.innerHTML = `
+        <span class="context-menu-icon">${getPluginIcon(type)}</span>
+        <span class="context-menu-text">${name}</span>
+      `;
+      
+      item.addEventListener('click', () => {
+        // Add new item at click position
+        grid.addItem({
+          x: gridX,
+          y: gridY,
+          width: type === 'markdown' ? 30 : 20,
+          height: type === 'markdown' ? 20 : 15,
+          zIndex: grid.getNextZIndex(), // Get highest z-index + 1
+          plugin: { type }
+        });
+        
+        // Hide menu
+        hideContextMenu();
+      });
+      
+      contextMenu.appendChild(item);
+    });
+    
+    // Position and show context menu
+    contextMenu.style.left = `${mouseX}px`;
+    contextMenu.style.top = `${mouseY}px`;
+    contextMenu.style.display = 'block';
+    
+    // Make sure context menu stays within viewport
+    const menuRect = contextMenu.getBoundingClientRect();
+    if (menuRect.right > window.innerWidth) {
+      contextMenu.style.left = `${mouseX - menuRect.width}px`;
+    }
+    if (menuRect.bottom > window.innerHeight) {
+      contextMenu.style.top = `${mouseY - menuRect.height}px`;
+    }
+  });
+  
+  // Hide context menu when clicking elsewhere
+  document.addEventListener('click', hideContextMenu);
+  
+  // Also hide on scroll
+  document.addEventListener('scroll', hideContextMenu);
+  
+  function hideContextMenu() {
+    contextMenu.style.display = 'none';
+  }
 }
 
 /**
