@@ -20,6 +20,9 @@
 - **Smart Z-Index Management**: Selected or newly added items are automatically brought to front
 - **Dark & Light Themes**: Switch between themes with a single click
 - **Persistent Settings**: Layout and preferences are saved to localStorage
+- **Workspace Save/Load**: Export and import workspace layouts with custom file naming
+- **Browser-Based Storage**: Save workspaces directly to the browser's IndexedDB storage
+- **File Management**: Rename or delete saved workspace files
 - **Responsive Design**: Works well on various screen sizes
 
 ## Live Demo

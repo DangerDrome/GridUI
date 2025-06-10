@@ -1,0 +1,175 @@
+/**
+ * SaveLoad Plugin Styles
+ */
+
+/* Plugin Container */
+.saveload-plugin {
+  padding: 1rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+/* Header */
+.saveload-header {
+  margin-bottom: 1rem;
+}
+
+.saveload-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--text-color);
+}
+
+/* Action Buttons */
+.saveload-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.saveload-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--bg-secondary);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.saveload-btn:hover {
+  background-color: var(--bg-hover);
+}
+
+.saveload-btn .material-icons {
+  font-size: 1.2rem;
+}
+
+/* Recent Files Section */
+.saveload-recent {
+  margin-bottom: 1.5rem;
+}
+
+.saveload-recent h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.recent-files-list {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.recent-file-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  position: relative;
+}
+
+.recent-file-item:hover {
+  background-color: var(--bg-hover);
+}
+
+.recent-file-item:not(:last-child) {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.recent-file-item .material-icons {
+  font-size: 1.2rem;
+  color: var(--accent-color);
+}
+
+.recent-file-name {
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-grow: 1;
+}
+
+.recent-file-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.recent-file-item:hover .recent-file-actions {
+  opacity: 1;
+}
+
+.recent-file-actions .material-icons {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.recent-file-actions .material-icons:hover {
+  color: var(--accent-color);
+}
+
+.rename-file, .delete-file {
+  padding: 3px;
+  border-radius: 3px;
+}
+
+.rename-file:hover {
+  background-color: rgba(0, 150, 136, 0.2);
+}
+
+.delete-file:hover {
+  background-color: rgba(244, 67, 54, 0.2);
+}
+
+.no-recent-files {
+  padding: 1rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Info Section */
+.saveload-info {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.saveload-info p {
+  margin: 0;
+}
+
+/* Context Menu Additions */
+.context-menu-separator {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 0.5rem 0;
+}
+
+/* Header Export/Import Buttons */
+#save-to-file-btn,
+#load-from-file-btn {
+  background-color: var(--bg-secondary);
+}
+
+#save-to-file-btn:hover,
+#load-from-file-btn:hover {
+  background-color: var(--bg-hover);
+}

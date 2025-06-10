@@ -29,11 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showAddItemDialog(grid);
   });
   
-  const saveBtn = document.getElementById('save-btn');
-  saveBtn.addEventListener('click', () => {
-    grid.saveLayout();
-    showNotification('Layout saved successfully');
-  });
+  // Save button removed as it's replaced by Export/Import functionality
   
   const resetBtn = document.getElementById('reset-btn');
   resetBtn.addEventListener('click', () => {
@@ -325,26 +321,28 @@ function showNotification(message) {
  * @param {Grid} grid - The grid instance
  */
 function createDefaultLayout(grid) {
+  console.log('Creating default layout directly');
+  
   // Add a markdown editor
   grid.addItem({
-    x: 0,
-    y: 0,
-    width: 30,
-    height: 40,
+    x: 24,
+    y: 33,
+    width: 44, 
+    height: 26,
     plugin: {
       type: 'markdown',
       state: {
-        content: '# Welcome to Grid UI\n\nThis is a resizable, sortable, extendable Grid UI System with plugin support.\n\n## Features\n\n- Drag and drop grid items\n- Resize grid items\n- Multiple content types via plugins\n- Dark and light themes\n- Persistent layouts'
+        content: '# Welcome to Grid UI\n\nThis is a resizable, sortable, extendable Grid UI System with plugin support.\n\n## Features\n\n- Drag and drop grid items\n- Resize grid items\n- Multiple content types via plugins\n- Dark and light themes\n- Persistent layouts\n- File-based export/import system'
       }
     }
   });
   
   // Add a video player
   grid.addItem({
-    x: 12,
+    x: 24,
     y: 0,
-    width: 28,
-    height: 26,
+    width: 30,
+    height: 33,
     plugin: {
       type: 'video',
       options: {
@@ -359,9 +357,9 @@ function createDefaultLayout(grid) {
   // Add a file tree
   grid.addItem({
     x: 0,
-    y: 8,
+    y: 0,
     width: 24,
-    height: 60,
+    height: 59,
     plugin: {
       type: 'filetree'
     }
@@ -369,9 +367,9 @@ function createDefaultLayout(grid) {
   
   // Add a node graph
   grid.addItem({
-    x: 8,
-    y: 8,
-    width: 28,
+    x: 68,
+    y: 33,
+    width: 32,
     height: 26,
     plugin: {
       type: 'nodegraph'
@@ -380,15 +378,50 @@ function createDefaultLayout(grid) {
   
   // Add an image sequence player
   grid.addItem({
-    x: 40,
+    x: 54,
     y: 0,
-    width: 30,
-    height: 30,
+    width: 46,
+    height: 33,
     plugin: {
       type: 'imagesequence',
       options: {
         framerate: 24
       }
+    }
+  });
+  
+  console.log('Default layout created successfully');
+}
+
+/**
+ * Create a fallback layout if default_layout.json can't be loaded
+ * @param {Grid} grid - The grid instance
+ */
+function createFallbackLayout(grid) {
+  console.log('Using fallback layout');
+  
+  // Add a markdown editor
+  grid.addItem({
+    x: 0,
+    y: 0,
+    width: 30,
+    height: 40,
+    plugin: {
+      type: 'markdown',
+      state: {
+        content: '# Welcome to Grid UI\n\nThis is a resizable, sortable, extendable Grid UI System with plugin support.\n\n## Features\n\n- Drag and drop grid items\n- Resize grid items\n- Multiple content types via plugins\n- Dark and light themes\n- Persistent layouts\n- File-based export/import system'
+      }
+    }
+  });
+  
+  // Add a file tree
+  grid.addItem({
+    x: 0,
+    y: 8,
+    width: 24,
+    height: 60,
+    plugin: {
+      type: 'filetree'
     }
   });
 }

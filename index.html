@@ -17,6 +17,8 @@
   <script src="js/plugins/filetree.js"></script>
   <script src="js/plugins/nodegraph.js"></script>
   <script src="js/plugins/imagesequence.js"></script>
+  <script src="js/plugins/contextmenu-exportimport.js"></script>
+  <!-- No longer using saveload.js plugin as we've replaced it with contextmenu-exportimport.js -->
   <!-- Load grid system -->
   <script src="js/grid.js"></script>
   <!-- Load main application -->
@@ -32,10 +34,7 @@
         <span class="btn-icon material-icons">add</span>
         <span class="btn-text">Add Item</span>
       </button>
-      <button id="save-btn" class="control-btn" title="Save Layout">
-        <span class="btn-icon material-icons">save</span>
-        <span class="btn-text">Save</span>
-      </button>
+      <!-- Save button removed as it's replaced by Export/Import functionality -->
       <button id="reset-btn" class="control-btn" title="Reset Layout">
         <span class="btn-icon material-icons">refresh</span>
         <span class="btn-text">Reset</span>

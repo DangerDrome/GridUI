@@ -1,0 +1,169 @@
+{
+  "gridOptions": {
+    "columns": 100,
+    "rowHeight": 10,
+    "gap": 10,
+    "snapToGrid": true,
+    "autoSave": true,
+    "theme": "dark"
+  },
+  "items": [
+    {
+      "id": "item-1",
+      "x": 24,
+      "y": 33,
+      "width": 44,
+      "height": 26,
+      "zIndex": 12,
+      "plugin": {
+        "type": "markdown",
+        "options": {},
+        "state": {
+          "content": "# Welcome to Grid UI\n\nThis is a resizable, sortable, extendable Grid UI System with plugin support.\n\n## Features\n\n- Drag and drop grid items\n- Resize grid items\n- Multiple content types via plugins\n- Dark and light themes\n- Persistent layouts\n- File-based save/load system"
+        }
+      }
+    },
+    {
+      "id": "item-2",
+      "x": 24,
+      "y": 0,
+      "width": 30,
+      "height": 33,
+      "zIndex": 5,
+      "plugin": {
+        "type": "video",
+        "options": {
+          "controls": true
+        },
+        "state": {
+          "src": "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4",
+          "currentTime": 0
+        }
+      }
+    },
+    {
+      "id": "item-3",
+      "x": 0,
+      "y": 0,
+      "width": 24,
+      "height": 59,
+      "zIndex": 4,
+      "plugin": {
+        "type": "filetree",
+        "options": {},
+        "state": {
+          "rootHandle": {},
+          "files": [
+            {
+              "name": "GridUI",
+              "type": "folder",
+              "children": [
+                {
+                  "name": "_old",
+                  "type": "folder",
+                  "children": []
+                },
+                {
+                  "name": ".git",
+                  "type": "folder",
+                  "children": []
+                },
+                {
+                  "name": "css",
+                  "type": "folder",
+                  "children": []
+                },
+                {
+                  "name": "js",
+                  "type": "folder",
+                  "children": []
+                },
+                {
+                  "name": "media",
+                  "type": "folder",
+                  "children": []
+                },
+                {
+                  "name": "workspace",
+                  "type": "folder",
+                  "children": []
+                },
+                {
+                  "name": "index.html",
+                  "type": "file"
+                },
+                {
+                  "name": "LICENSE",
+                  "type": "file"
+                },
+                {
+                  "name": "README.md",
+                  "type": "file"
+                }
+              ]
+            }
+          ],
+          "expanded": {
+            "R3JpZFVJ": true
+          },
+          "currentPath": "",
+          "sequences": {}
+        }
+      }
+    },
+    {
+      "id": "item-4",
+      "x": 68,
+      "y": 33,
+      "width": 32,
+      "height": 26,
+      "zIndex": 14,
+      "plugin": {
+        "type": "nodegraph",
+        "options": {},
+        "state": {
+          "nodes": [
+            {
+              "id": "node_1749536692982",
+              "x": 100,
+              "y": 100,
+              "label": "Node 1",
+              "color": "hsl(33.58843383333635, 70%, 70%)"
+            },
+            {
+              "id": "node_1749536692983",
+              "x": 300,
+              "y": 150,
+              "label": "Node 2",
+              "color": "hsl(343.1193361604609, 70%, 70%)"
+            }
+          ],
+          "connections": [],
+          "selectedNode": null
+        }
+      }
+    },
+    {
+      "id": "item-5",
+      "x": 54,
+      "y": 0,
+      "width": 46,
+      "height": 33,
+      "zIndex": 13,
+      "plugin": {
+        "type": "imagesequence",
+        "options": {
+          "framerate": 24
+        },
+        "state": {
+          "playlists": [],
+          "currentPlaylist": 0,
+          "currentFrame": 0,
+          "playing": false,
+          "framerate": 24,
+          "annotations": {}
+        }
+      }
+    }
+  ]
+}
