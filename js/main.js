@@ -390,6 +390,17 @@ function createDefaultLayout(grid) {
     }
   });
   
+  // Add the plugin manager
+  grid.addItem({
+    x: 0,
+    y: 60,
+    width: 100,
+    height: 35,
+    plugin: {
+      type: 'plugin-manager'
+    }
+  });
+  
   console.log('Default layout created successfully');
 }
 
