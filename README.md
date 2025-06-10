@@ -11,18 +11,18 @@
 - **Drag and Drop**: Move grid items anywhere in the workspace by dragging their headers
 - **Resizable**: Adjust item dimensions by dragging the resize handle in the bottom right corner
 - **Extendable**: Plugin architecture allows for easy addition of new content types
-- **Multiple Content Types**: Comes with four built-in plugins:
+- **Multiple Content Types**: Comes with five built-in plugins:
   - Markdown Editor with live preview
   - Video Player with custom controls
   - File Explorer with folder navigation
   - Node Graph for visual connections
+  - Image Sequence Player for viewing frame sequences
 - **Context Menu**: Right-click anywhere on the grid to add items directly at that location
 - **Smart Z-Index Management**: Selected or newly added items are automatically brought to front
 - **Dark & Light Themes**: Switch between themes with a single click
 - **Persistent Settings**: Layout and preferences are saved to localStorage
-- **Workspace Save/Load**: Export and import workspace layouts with custom file naming
-- **Browser-Based Storage**: Save workspaces directly to the browser's IndexedDB storage
-- **File Management**: Rename or delete saved workspace files
+- **Export/Import System**: Export and import workspace layouts with custom file naming
+- **File Management**: Right-click context menu provides export/import options for your workspace
 - **Responsive Design**: Works well on various screen sizes
 
 ## Live Demo
@@ -39,6 +39,7 @@ git clone https://github.com/yourusername/gridui.git
 
 # Navigate to the project
 cd gridui
+```
 
 Then open `index.html`
 
@@ -48,7 +49,8 @@ Then open `index.html`
 - **Move Items**: Drag items by their header bars
 - **Resize Items**: Drag the small triangle in the bottom-right corner
 - **Close Items**: Click the "×" button in the item's header
-- **Save Layout**: Click the "Save" button to persist your layout
+- **Export Layout**: Click the "Export" button or use the context menu to save your layout as a JSON file
+- **Import Layout**: Click the "Import" button or use the context menu to load a previously exported layout
 - **Reset Layout**: Click the "Reset" button to restore default layout
 - **Toggle Theme**: Click the "Theme" button to switch between light and dark mode
 
@@ -57,7 +59,8 @@ Then open `index.html`
 ```
 grid-system/
 ├── css/
-│   └── styles.css          # Main stylesheet with light/dark themes
+│   ├── styles.css          # Main stylesheet with light/dark themes
+│   └── imagesequence.css   # Styles for image sequence player
 ├── js/
 │   ├── grid.js             # Core grid functionality
 │   ├── main.js             # Application initialization
@@ -67,7 +70,9 @@ grid-system/
 │       ├── markdown.js     # Markdown editor plugin
 │       ├── video.js        # Video player plugin
 │       ├── filetree.js     # File explorer plugin
-│       └── nodegraph.js    # Node graph plugin
+│       ├── nodegraph.js    # Node graph plugin
+│       ├── imagesequence.js # Image sequence player plugin
+│       └── contextmenu-exportimport.js # Export/Import functionality
 └── index.html              # Main HTML entry point
 ```
 
@@ -95,6 +100,8 @@ The right-click context menu provides a quick way to add items exactly where you
 3. A new item will be created at the clicked position
 4. The new item is automatically brought to the front (highest z-index)
 
+The context menu also includes Export and Import options for your workspace layout.
+
 ### Themes
 
 Themes are implemented using CSS variables. Switching themes is as simple as changing the `data-theme` attribute on the body element, which triggers a cascade of style changes throughout the application.
@@ -106,6 +113,8 @@ The application uses the browser's localStorage API to save:
 - Plugin configurations
 - Theme preference
 - Content state for each plugin
+
+For long-term storage, you can use the Export/Import functionality to save layouts as JSON files.
 
 ## Creating Custom Plugins
 

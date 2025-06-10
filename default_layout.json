@@ -14,12 +14,12 @@
       "y": 33,
       "width": 44,
       "height": 26,
-      "zIndex": 12,
+      "zIndex": 1,
       "plugin": {
         "type": "markdown",
         "options": {},
         "state": {
-          "content": "# Welcome to Grid UI\n\nThis is a resizable, sortable, extendable Grid UI System with plugin support.\n\n## Features\n\n- Drag and drop grid items\n- Resize grid items\n- Multiple content types via plugins\n- Dark and light themes\n- Persistent layouts\n- File-based save/load system"
+          "content": "# Welcome to Grid UI\n\nThis is a resizable, sortable, extendable Grid UI System with plugin support.\n\n## Features\n\n- Drag and drop grid items\n- Resize grid items\n- Multiple content types via plugins\n- Dark and light themes\n- Persistent layouts\n- File-based export/import system"
         }
       }
     },
@@ -29,7 +29,7 @@
       "y": 0,
       "width": 30,
       "height": 33,
-      "zIndex": 5,
+      "zIndex": 1,
       "plugin": {
         "type": "video",
         "options": {
@@ -47,7 +47,7 @@
       "y": 0,
       "width": 24,
       "height": 59,
-      "zIndex": 4,
+      "zIndex": 1,
       "plugin": {
         "type": "filetree",
         "options": {},
@@ -89,6 +89,10 @@
                   "children": []
                 },
                 {
+                  "name": "default_layout.json",
+                  "type": "file"
+                },
+                {
                   "name": "index.html",
                   "type": "file"
                 },
@@ -117,25 +121,25 @@
       "y": 33,
       "width": 32,
       "height": 26,
-      "zIndex": 14,
+      "zIndex": 1,
       "plugin": {
         "type": "nodegraph",
         "options": {},
         "state": {
           "nodes": [
             {
-              "id": "node_1749536692982",
+              "id": "node_1749537298327",
               "x": 100,
               "y": 100,
               "label": "Node 1",
-              "color": "hsl(33.58843383333635, 70%, 70%)"
+              "color": "hsl(337.96085548480823, 70%, 70%)"
             },
             {
-              "id": "node_1749536692983",
+              "id": "node_1749537298328",
               "x": 300,
               "y": 150,
               "label": "Node 2",
-              "color": "hsl(343.1193361604609, 70%, 70%)"
+              "color": "hsl(24.296272819163356, 70%, 70%)"
             }
           ],
           "connections": [],
@@ -149,7 +153,7 @@
       "y": 0,
       "width": 46,
       "height": 33,
-      "zIndex": 13,
+      "zIndex": 1,
       "plugin": {
         "type": "imagesequence",
         "options": {
